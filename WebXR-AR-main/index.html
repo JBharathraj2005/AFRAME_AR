@@ -3,43 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markerless AR Using Aframe</title>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <title>Markerless AR using Aframe</title>
+    <!-- Stable A-Frame -->
+   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
-    <script src="./aframe-ar-main/dist/aframe-ar.min.js"></script>
+   <!-- Your Local aframe-ar -->
+   <script src="./aframe-ar-main/dist/aframe-ar.min.js"></script>
 </head>
 <body>
     <script>
-        // --- NEW COMPONENT TO ADD TEXTURE ---
-        AFRAME.registerComponent('modify-material', {
-            init: function () {
-                // Wait for the model to finish loading
-                this.el.addEventListener('model-loaded', () => {
-                    const obj = this.el.getObject3D('mesh');
-                    const loader = new THREE.TextureLoader();
-                    
-                    // Replace 'dhoni_texture.png' with your actual image filename
-                    loader.load('dhoni_kit.png', (texture) => {
-                        texture.flipY = false; // Critical for GLTF models
-                        obj.traverse(node => {
-                            if (node.isMesh) {
-                                node.material.map = texture;
-                                node.material.needsUpdate = true;
-                            }
-                        });
-                    });
-                });
-            }
-        });
-        // ------------------------------------
-
         function showMessage(message){
             let hud = document.querySelector("#hud");
             if(hud){
                 hud.setAttribute('value',message);
             }
         }
-
         AFRAME.registerComponent('ar-logic',{
             init: function(){
                 showMessage('ar-logic is running..')
@@ -58,7 +36,6 @@
                 circle.setAttribute('position',intersection.point);
             }
         });
-
         window.addEventListener('touchstart', function(){
             let box = document.querySelector("#box");
             let circle = document.querySelector("#circle");
@@ -66,17 +43,13 @@
             box.setAttribute('position',pos)
         });
     </script>
-
     <a-scene ar ar-logic>
         <a-camera id="cam" ar-raycaster="objects:none;">
              <a-text id="hud" value="Summa Text" position="0 -0.1 -0.25" align="center" wrap-count="800"></a-text>
         </a-camera>
-
         <a-ring id="circle" rotation="-90 0 0" inner-radius="0.01" outer-radius="0.02"></a-ring>
-
-        <a-gltf-model id="box" src="model/model.glb" modify-material scale="1 1 1" position="0 0 0"></a-gltf-model>
-        
-        <a-light type="ambient" intensity="1.5"></a-light>
+       <a-gltf-model id="box" src="model/model.glb" scale="1 1 1" position="0 0 0"></a-gltf-model>
     </a-scene>
+    
 </body>
 </html>
